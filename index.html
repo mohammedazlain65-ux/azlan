@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="en">                                                        
+<head>
+    <meta charset="UTF-8">                                                                                                                                                                                                                                                                                                               
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Vendor Marketplace - Shop Everything You Need</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">                                              
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --secondary-color: #8b5cf6;
+            --dark-bg: #1e293b;
+            --light-bg: #f8fafc;                                
+            --success-color: #10b981;
+            --danger-color: #ef4444;
+            --warning-color: #f59e0b;                                                                           
+            --info-color: #06b6d4;
+            --card-bg: #ffffff;
+            --text-primary: #0f172a;            
+            --text-secondary: #64748b;
+            --border-color: #e2e8f0;
+        }                                                                                           
+        
+        * {
+            margin: 0;
+            padding: 0;                                                                                                                                                                                                                                                                                                                                                                
+            box-sizing: border-box;
+        }                  
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #f0f4ff 0%, #e5edff 100%);
+            min-height: 100vh;
+        }
+        
+        /* ============ HEADER & NAVIGATION ============ */
+        .top-header {
+            background: var(--dark-bg);
+            color: white;
+            padding: 12px 0;
+            font-size: 13px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .top-header a {
+            transition: all 0.3s ease;
+        }
+        
+        .top-header a:hover {
+            color: var(--primary-color) !important;
+        }
+        
+        .main-header {
+            background: white;
+            padding: 20px 0;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 0;
+            z-index: 999;
+        }
+        
+        .logo {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--text-primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            letter-spacing: -0.5px;
+            transition: all 0.3s ease;
+        }
+        
+        .logo i {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .logo:hover {
+            transform: translateY(-2px);
+        }
+        
+        /* ============ HEADER NAVIGATION LINKS ============ */
+        .header-nav-links {
+            display: flex;
+            gap: 35px;
+            align-items: center;
+            justify-content: flex-end;
+        }
+        
+        .header-nav-link {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 15px;
+            position: relative;
+            padding: 8px 0;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .header-nav-link i {
+            font-size: 16px;
+            color: var(--primary-color);
+        }
+        
+        .header-nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            transition: width 0.3s ease;
+        }
+        
+        .header-nav-link:hover {
+            color: var(--primary-color);
+        }
+        
+        .header-nav-link:hover::after {
+            width: 100%;
+        }
+        
+        /* ============ LOGIN DROPDOWN (CLICK-BASED) ============ */
+        .login-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .login-btn {
+            color: white;
+            text-decoration: none;
+            padding: 8px 20px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            font-weight: 600;
+            user-select: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .login-btn:hover {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            border-color: transparent;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+        }
+
+        .login-btn .arrow-icon {
+            font-size: 11px;
+            transition: transform 0.3s ease;
+            display: inline-block;
+        }
+
+        .login-btn.active .arrow-icon {
+            transform: rotate(180deg);
+        }
+        
+        .dropdown-menu-custom {
+            display: none;
+            position: absolute;
+            top: calc(100% + 12px);
+            right: 0;
+            background: white;
+            min-width: 260px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            border-radius: 16px;
+            z-index: 1000;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            /* Remove pointer-events issues */
+        }
+        
+        .dropdown-menu-custom.show {
+            display: block;
+            animation: fadeInDown 0.3s ease;
+        }
+        
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .dropdown-menu-custom::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            right: 30px;
+            width: 16px;
+            height: 16px;
+            background: white;
+            transform: rotate(45deg);
+            border-left: 1px solid var(--border-color);
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .dropdown-item-custom {
+            display: flex;
+            align-items: center;
+            padding: 16px 20px;
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid var(--border-color);
+            gap: 12px;
+        }
+        
+        .dropdown-item-custom:last-child {
+            border-bottom: none;
+        }
+        
+        .dropdown-item-custom:hover {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(139, 92, 246, 0.08) 100%);
+            padding-left: 25px;
+        }
+        
+        .dropdown-item-custom i {
+            font-size: 20px;
+            width: 24px;
+            text-align: center;
+            color: var(--primary-color);
+        }
+        
+        .dropdown-item-custom .item-text {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .dropdown-item-custom .item-title {
+            font-weight: 700;
+            font-size: 15px;
+            color: var(--text-primary);
+        }
+        
+        .dropdown-item-custom .item-desc {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+        
+        /* ============ HERO SECTION ============ */
+        .hero-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 100px 0;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23ffffff" fill-opacity="0.1" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,112C672,96,768,96,864,112C960,128,1056,160,1152,165.3C1248,171,1344,149,1392,138.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
+            background-size: cover;
+            opacity: 0.3;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            animation: fadeInUp 0.8s ease;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .hero-section h1 {
+            font-size: 56px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            letter-spacing: -1px;
+        }
+        
+        .hero-section p {
+            font-size: 20px;
+            margin-bottom: 35px;
+            opacity: 0.95;
+            font-weight: 500;
+        }
+        
+        .btn-hero {
+            background: white;
+            color: var(--primary-color);
+            padding: 16px 40px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 700;
+            display: inline-block;
+            transition: all 0.3s ease;
+            border: none;
+            font-size: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .btn-hero:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-outline-light {
+            border: 2px solid white !important;
+            color: white !important;
+            font-weight: 700 !important;
+            transition: all 0.3s ease !important;
+        }
+        
+        .btn-outline-light:hover {
+            background: white !important;
+            color: var(--primary-color) !important;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255,255,255,0.3);
+        }
+        
+        /* ============ FEATURES SECTION ============ */
+        .features-section {
+            padding: 80px 0;
+            background: white;
+        }
+        
+        .feature-box {
+            text-align: center;
+            padding: 40px 30px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            background: white;
+            border: 2px solid var(--border-color);
+        }
+        
+        .feature-box:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+            border-color: var(--primary-color);
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%);
+        }
+        
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .feature-box:hover .feature-icon {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 12px 35px rgba(99, 102, 241, 0.4);
+        }
+        
+        .feature-box h4 {
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+            font-size: 20px;
+        }
+        
+        .feature-box p {
+            color: var(--text-secondary);
+            margin: 0;
+            font-size: 15px;
+            font-weight: 500;
+        }
+        
+        /* ============ FOOTER ============ */
+        .footer {
+            background: var(--dark-bg);
+            color: white;
+            padding: 60px 0 30px;
+            margin-top: auto;
+        }
+        
+        .footer h5 {
+            font-weight: 700;
+            margin-bottom: 25px;
+            color: white;
+            font-size: 18px;
+            position: relative;
+            padding-bottom: 12px;
+        }
+        
+        .footer h5::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            border-radius: 3px;
+        }
+        
+        .footer-links {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+        
+        .footer-links a {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            display: inline-block;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+            padding-left: 8px;
+            color: var(--primary-color);
+        }
+        
+        .footer-links a::before {
+            content: '→';
+            margin-right: 8px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .footer-links a:hover::before {
+            opacity: 1;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 12px;
+            margin-top: 25px;
+        }
+        
+        .social-links a {
+            width: 45px;
+            height: 45px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            transition: all 0.3s ease;
+            font-size: 18px;
+        }
+        
+        .social-links a:hover {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
+        }
+        
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,0.1);
+            margin-top: 50px;
+            padding-top: 30px;
+            text-align: center;
+            color: rgba(255,255,255,0.6);
+            font-weight: 500;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-section h1 {
+                font-size: 36px;
+            }
+            
+            .hero-section p {
+                font-size: 16px;
+            }
+            
+            .header-nav-links {
+                flex-wrap: wrap;
+                gap: 15px;
+                justify-content: center;
+                margin-top: 15px;
+            }
+            
+            .header-nav-link {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Header -->
+    <div class="top-header">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <span><i class="fas fa-phone"></i> +91 1800-123-4567</span>
+                    <span class="ms-3"><i class="fas fa-envelope"></i> support@marketplace.com</span>
+                </div>
+                <div class="col-md-6 text-end">
+                    <!-- ✅ FIXED: Click-based dropdown instead of hover-based -->
+                    <div class="login-dropdown" id="loginDropdown">
+                        <span class="login-btn" id="loginBtn" onclick="toggleDropdown(event)">
+                            <i class="fas fa-sign-in-alt"></i> Login
+                            <i class="fas fa-chevron-down arrow-icon"></i>
+                        </span>
+                        <div class="dropdown-menu-custom" id="loginMenu">
+                            <a href="buyerlogin.jsp" class="dropdown-item-custom">
+                                <i class="fas fa-shopping-cart"></i>
+                                <div class="item-text">
+                                    <span class="item-title">Login as Customer</span>
+                                    <span class="item-desc">Shop amazing products</span>
+                                </div>
+                            </a>
+                            <a href="sellerlogin.jsp" class="dropdown-item-custom">
+                                <i class="fas fa-store"></i>
+                                <div class="item-text">
+                                    <span class="item-title">Login as Seller</span>
+                                    <span class="item-desc">Manage your store</span>
+                                </div>
+                            </a>
+                            <a href="adlogin.jsp" class="dropdown-item-custom">
+                                <i class="fas fa-user-shield"></i>
+                                <div class="item-text">
+                                    <span class="item-title">Login as Admin</span>
+                                    <span class="item-desc">Platform management</span>
+                                </div>
+                            </a>
+                            <a href="login.jsp" class="dropdown-item-custom">
+                                <i class="fas fa-user-shield"></i>
+                                <div class="item-text">
+                                    <span class="item-title">Login as logistics</span>
+                                    <span class="item-desc">logistics management</span>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    <span class="mx-2">|</span>
+                    <a href="buyerReg.jsp" class="text-white" style="font-weight: 600;">
+                        <i class="fas fa-user-plus"></i> Register
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Header -->
+    <header class="main-header">
+        <div class="container">
+            <div class="row align-items-center">
+                <!-- Logo -->
+                <div class="col-md-3">
+                    <a href="index.html" class="logo">
+                        <i class="fas fa-shopping-bag"></i>
+                        <span>MarketHub</span>
+                    </a>
+                </div>
+                
+                <!-- Header Navigation Links -->
+                <div class="col-md-9">
+                    <div class="header-nav-links">
+                        <a href="#home" class="header-nav-link">
+                            <i class="fas fa-home"></i> Home
+                        </a>
+                        <a href="#about" class="header-nav-link">
+                            <i class="fas fa-info-circle"></i> About Us
+                        </a>
+                        <a href="#services" class="header-nav-link">
+                            <i class="fas fa-concierge-bell"></i> Services
+                        </a>
+                        <a href="#contact" class="header-nav-link">
+                            <i class="fas fa-envelope"></i> Contact
+                        </a>
+                        <a href="#faq" class="header-nav-link">
+                            <i class="fas fa-question-circle"></i> FAQ
+                        </a>
+                        <a href="#support" class="header-nav-link">
+                            <i class="fas fa-headset"></i> Support
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6 hero-content">
+                    <h1>Welcome to MarketHub</h1>
+                    <p>Discover amazing products from thousands of verified sellers. Shop with confidence!</p>
+                    <div class="d-flex gap-3">
+                        <a href="buyerlogin.jsp" class="btn-hero">
+                            <i class="fas fa-shopping-bag"></i> Shop Now
+                        </a>
+                        <a href="sellerlogin.jsp" class="btn btn-outline-light btn-lg" style="border-radius: 12px;">
+                            <i class="fas fa-store"></i> Become a Seller
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-6 text-center">
+                    <i class="fas fa-shopping-cart" style="font-size: 250px; opacity: 0.2;"></i>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="services" class="features-section">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 style="font-size: 42px; font-weight: 800; color: var(--text-primary); margin-bottom: 15px;">Why Choose MarketHub?</h2>
+                <p style="font-size: 18px; color: var(--text-secondary); max-width: 700px; margin: 0 auto;">Experience the best online shopping with our premium features and customer-first approach</p>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-3">
+                    <div class="feature-box">
+                        <div class="feature-icon">
+                            <i class="fas fa-shipping-fast"></i>
+                        </div>
+                        <h4>Free Shipping</h4>
+                        <p>On orders above ₹500 across India</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="feature-box">
+                        <div class="feature-icon">
+                            <i class="fas fa-undo"></i>
+                        </div>
+                        <h4>Easy Returns</h4>
+                        <p>7 days hassle-free return policy</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="feature-box">
+                        <div class="feature-icon">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                        <h4>Secure Payment</h4>
+                        <p>100% secure payment gateway</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="feature-box">
+                        <div class="feature-icon">
+                            <i class="fas fa-headset"></i>
+                        </div>
+                        <h4>24/7 Support</h4>
+                        <p>Dedicated customer support team</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" style="padding: 80px 0; background: linear-gradient(135deg, #f0f4ff 0%, #e5edff 100%);">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <h2 style="font-size: 42px; font-weight: 800; color: var(--text-primary); margin-bottom: 20px;">About MarketHub</h2>
+                    <p style="font-size: 16px; color: var(--text-secondary); line-height: 1.8; margin-bottom: 15px;">
+                        MarketHub is your trusted multi-vendor marketplace connecting buyers with verified sellers across India. We're committed to providing a seamless shopping experience with quality products at competitive prices.
+                    </p>
+                    <p style="font-size: 16px; color: var(--text-secondary); line-height: 1.8; margin-bottom: 25px;">
+                        Our platform empowers entrepreneurs and small businesses to reach millions of customers while ensuring buyers get authentic products with secure payment options and fast delivery.
+                    </p>
+                    <div class="d-flex gap-4">
+                        <div>
+                            <h3 style="font-size: 36px; font-weight: 800; color: var(--primary-color);">10K+</h3>
+                            <p style="color: var(--text-secondary); font-weight: 600;">Active Sellers</p>
+                        </div>
+                        <div>
+                            <h3 style="font-size: 36px; font-weight: 800; color: var(--primary-color);">50K+</h3>
+                            <p style="color: var(--text-secondary); font-weight: 600;">Happy Customers</p>
+                        </div>
+                        <div>
+                            <h3 style="font-size: 36px; font-weight: 800; color: var(--primary-color);">100K+</h3>
+                            <p style="color: var(--text-secondary); font-weight: 600;">Products Listed</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 text-center">
+                    <i class="fas fa-store" style="font-size: 300px; color: var(--primary-color); opacity: 0.15;"></i>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" style="padding: 80px 0; background: white;">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 style="font-size: 42px; font-weight: 800; color: var(--text-primary); margin-bottom: 15px;">Get In Touch</h2>
+                <p style="font-size: 18px; color: var(--text-secondary);">Have questions? We'd love to hear from you!</p>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="feature-box">
+                        <div class="feature-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <h4>Visit Us</h4>
+                        <p>123 Market Street, Bangalore<br>Karnataka, India - 560001</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-box">
+                        <div class="feature-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <h4>Call Us</h4>
+                        <p>+91 1800-123-4567<br>Mon-Sat: 9AM - 6PM</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-box">
+                        <div class="feature-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <h4>Email Us</h4>
+                        <p>support@markethub.com<br>We reply within 24 hours</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" style="padding: 80px 0; background: linear-gradient(135deg, #f0f4ff 0%, #e5edff 100%);">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 style="font-size: 42px; font-weight: 800; color: var(--text-primary); margin-bottom: 15px;">Frequently Asked Questions</h2>
+                <p style="font-size: 18px; color: var(--text-secondary);">Find answers to common questions about MarketHub</p>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-md-10">
+                    <div class="accordion" id="faqAccordion">
+                        <div class="accordion-item" style="border: none; margin-bottom: 15px; border-radius: 12px; overflow: hidden;">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1" style="font-weight: 700; font-size: 16px; background: white; color: var(--text-primary);">
+                                    How do I create an account on MarketHub?
+                                </button>
+                            </h2>
+                            <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body" style="background: white; color: var(--text-secondary); padding: 20px;">
+                                    Click on the "Register" button in the top right corner, fill in your details, and verify your email address. You can then start shopping immediately!
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item" style="border: none; margin-bottom: 15px; border-radius: 12px; overflow: hidden;">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2" style="font-weight: 700; font-size: 16px; background: white; color: var(--text-primary);">
+                                    What payment methods do you accept?
+                                </button>
+                            </h2>
+                            <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body" style="background: white; color: var(--text-secondary); padding: 20px;">
+                                    We accept all major credit/debit cards, UPI, net banking, and popular wallets like Paytm, PhonePe, and Google Pay.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item" style="border: none; margin-bottom: 15px; border-radius: 12px; overflow: hidden;">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3" style="font-weight: 700; font-size: 16px; background: white; color: var(--text-primary);">
+                                    How long does shipping take?
+                                </button>
+                            </h2>
+                            <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body" style="background: white; color: var(--text-secondary); padding: 20px;">
+                                    Standard delivery takes 3-5 business days. Express delivery options are available for faster shipping in select areas.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item" style="border: none; margin-bottom: 15px; border-radius: 12px; overflow: hidden;">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4" style="font-weight: 700; font-size: 16px; background: white; color: var(--text-primary);">
+                                    Can I become a seller on MarketHub?
+                                </button>
+                            </h2>
+                            <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body" style="background: white; color: var(--text-secondary); padding: 20px;">
+                                    Yes! Click on "Become a Seller" to register. You'll need to provide business documentation for verification. Once approved, you can start listing products.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3">
+                    <h5>About MarketHub</h5>
+                    <p style="color: rgba(255,255,255,0.7); font-weight: 500;">Your trusted multi-vendor marketplace for quality products at the best prices. Shop with confidence!</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <h5>Quick Links</h5>
+                    <ul class="footer-links">
+                        <li><a href="#about">About Us</a></li>
+                        <li><a href="#contact">Contact Us</a></li>
+                        <li><a href="buyerlogin.jsp">Shop Now</a></li>
+                        <li><a href="sellerlogin.jsp">Become a Seller</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h5>Customer Service</h5>
+                    <ul class="footer-links">
+                        <li><a href="#support">Help Center</a></li>
+                        <li><a href="#">Track Order</a></li>
+                        <li><a href="#">Shipping Info</a></li>
+                        <li><a href="#">Returns Policy</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h5>Sell With Us</h5>
+                    <ul class="footer-links">
+                        <li><a href="sellerlogin.jsp">Become a Seller</a></li>
+                        <li><a href="#">Seller Policies</a></li>
+                        <li><a href="#">Seller Success Stories</a></li>
+                        <li><a href="#">Seller Support</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 MarketHub - Multi-Vendor Marketplace. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // ============ CLICK-BASED LOGIN DROPDOWN ============
+        function toggleDropdown(event) {
+            event.stopPropagation();
+            const btn = document.getElementById('loginBtn');
+            const menu = document.getElementById('loginMenu');
+            
+            const isOpen = menu.classList.contains('show');
+            
+            // Close all dropdowns first
+            closeAllDropdowns();
+            
+            // Toggle current
+            if (!isOpen) {
+                menu.classList.add('show');
+                btn.classList.add('active');
+            }
+        }
+
+        function closeAllDropdowns() {
+            document.getElementById('loginMenu').classList.remove('show');
+            document.getElementById('loginBtn').classList.remove('active');
+        }
+
+        // Close dropdown when clicking anywhere outside
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('loginDropdown');
+            if (!dropdown.contains(event.target)) {
+                closeAllDropdowns();
+            }
+        });
+
+        // Close dropdown when pressing Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeAllDropdowns();
+            }
+        });
+
+        // ============ SMOOTH SCROLL ============
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.feature-box').forEach(box => {
+            box.style.opacity = '0';
+            box.style.transform = 'translateY(30px)';
+            box.style.transition = 'all 0.6s ease';
+            observer.observe(box);
+        });
+
+        // Active header link highlighting
+        window.addEventListener('scroll', function() {
+            let current = '';
+            const sections = document.querySelectorAll('section[id]');
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= (sectionTop - 200)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            document.querySelectorAll('.header-nav-link').forEach(link => {
+                link.style.color = 'var(--text-primary)';
+                if (link.getAttribute('href') === '#' + current) {
+                    link.style.color = 'var(--primary-color)';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

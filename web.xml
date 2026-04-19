@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee
+                             https://jakarta.ee/xml/ns/jakartaee/web-app_5_0.xsd"
+         version="5.0">
+
+    <display-name>LogiX Logistics Module</display-name>
+
+    <!-- ── Welcome file ─────────────────────────────────── -->
+    <welcome-file-list>
+        <welcome-file>login.jsp</welcome-file>
+    </welcome-file-list>
+
+    <!-- ── Error pages ──────────────────────────────────── -->
+    <error-page>
+        <error-code>404</error-code>
+        <location>/error/404.jsp</location>
+    </error-page>
+    <error-page>
+        <error-code>500</error-code>
+        <location>/error/500.jsp</location>
+    </error-page>
+
+    <!-- ── Session config ───────────────────────────────── -->
+    <session-config>
+        <session-timeout>60</session-timeout>
+    </session-config>
+
+    <!--
+        NOTE: Servlet mappings and filter mappings are handled via
+        @WebServlet and @WebFilter annotations in the Java source files.
+        No additional servlet or filter declarations are needed here.
+    -->
+
+</web-app>
